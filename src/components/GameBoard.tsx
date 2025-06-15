@@ -32,7 +32,12 @@ function getStoredBest() {
   return best ? parseInt(best) : 0;
 }
 
-const GameBoard: React.FC = () => {
+interface GameBoardProps {
+  history: number[];
+  setHistory: React.Dispatch<React.SetStateAction<number[]>>;
+}
+
+const GameBoard: React.FC<GameBoardProps> = ({ history, setHistory }) => {
   // Game state
   const [tiles, setTiles] = useState<{ id: number; color: string; isTarget: boolean }[]>(
     Array.from({ length: BOARD_SIZE * BOARD_SIZE }, (_, idx) => ({
@@ -100,8 +105,18 @@ const GameBoard: React.FC = () => {
         if (newBest !== prev) localStorage.setItem("ctc_bestscore", String(newBest));
         return newBest;
       });
+
+      // Add this score to session history (if not 0)
+      if (score > 0) {
+        setHistory(prev => {
+          // Don't mutate input!
+          const updated = [...prev, score];
+          // Limit to last 8 results
+          return updated.slice(-8);
+        });
+      }
     }
-  }, [timer, playing, score]);
+  }, [timer, playing, score, setHistory]);
 
   const handleTileClick = (idx: number) => {
     if (!playing) return;
