@@ -13,9 +13,11 @@ const Index = () => {
       </main>
       <footer className="text-sm text-muted-foreground py-6 text-center">
         &copy; {new Date().getFullYear()} Color Tile Clicker – Made with <span className="animate-pulse">🎮</span>
+        <span className="mx-2">· made by Avinash</span>
       </footer>
     </div>
   );
 };
 
 export default Index;
+
